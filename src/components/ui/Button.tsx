@@ -12,17 +12,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-primary text-white hover:bg-accent active:bg-primary focus-visible:outline-primary',
+    'bg-primary text-white hover:bg-accent focus-visible:outline-primary',
   secondary:
-    'bg-secondary text-primary border border-border hover:bg-border active:bg-secondary focus-visible:outline-primary',
+    'bg-transparent text-primary border border-primary hover:bg-primary hover:text-white focus-visible:outline-primary',
   ghost:
-    'bg-transparent text-primary hover:bg-secondary active:bg-border focus-visible:outline-primary',
+    'bg-transparent text-muted hover:text-primary focus-visible:outline-primary',
 }
 
 const sizeClasses: Record<Size, string> = {
-  sm: 'px-4 py-2 text-sm',
-  md: 'px-6 py-3 text-base',
-  lg: 'px-8 py-4 text-lg',
+  sm: 'px-5 py-2.5 text-sm tracking-wide',
+  md: 'px-7 py-3.5 text-sm tracking-wide',
+  lg: 'px-9 py-4 text-base tracking-wide',
 }
 
 export default function Button({
@@ -35,10 +35,10 @@ export default function Button({
   return (
     <button
       className={[
-        'inline-flex items-center justify-center rounded-full font-medium',
-        'transition-colors duration-200',
+        'inline-flex items-center justify-center font-body font-medium',
+        'transition-colors duration-300',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
-        'disabled:pointer-events-none disabled:opacity-50',
+        'disabled:pointer-events-none disabled:opacity-40',
         variantClasses[variant],
         sizeClasses[size],
         className,

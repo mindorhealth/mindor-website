@@ -7,6 +7,7 @@ import DoctorSection from '@/components/sections/DoctorSection'
 import StepsSection from '@/components/sections/StepsSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import FinalCtaSection from '@/components/sections/FinalCtaSection'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 // Default locale — Georgian. Will be driven by Sanity / i18n in later prompts.
 const locale = 'ka' as const
@@ -14,6 +15,8 @@ const locale = 'ka' as const
 export default function HomePage() {
   return (
     <>
+      {/* Client component: activates .reveal → .is-visible transitions on scroll */}
+      <ScrollReveal />
       <Header locale={locale} />
       <main>
         <HeroSection locale={locale} />

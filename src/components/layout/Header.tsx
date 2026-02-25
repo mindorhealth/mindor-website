@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Container from '../ui/Container'
 import Button from '../ui/Button'
 
@@ -10,31 +10,48 @@ interface HeaderProps {
 
 export default function Header({ locale = 'ka' }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const navLinks = [
-    { label: locale === 'ka' ? 'მთავარი' : 'Home', href: '#' },
     { label: locale === 'ka' ? 'პროდუქტი' : 'Product', href: '#' },
-    { label: locale === 'ka' ? 'ტესტი' : 'Quiz', href: '#' },
+    { label: locale === 'ka' ? 'ტესტი'    : 'Quiz',    href: '#' },
     { label: locale === 'ka' ? 'ჩვენ შესახებ' : 'About', href: '#' },
   ]
 
-  const ctaLabel = locale === 'ka' ? 'დაიწყე' : 'Get Started'
+  const ctaLabel = locale === 'ka' ? 'ტესტის გავლა' : 'Take the quiz'
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between">
+    <header
+      className={[
+        'sticky top-0 z-50 w-full transition-all duration-300',
+        scrolled
+          ? 'border-b border-border/60 bg-background/90 backdrop-blur-md'
+          : 'bg-background',
+      ].join(' ')}
+    >
+      <Container className="flex h-[72px] items-center justify-between">
+
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2" aria-label="Mindor">
-          <span className="font-heading text-2xl text-primary">Mindor</span>
+        <a href="/" aria-label="Mindor" className="shrink-0">
+          <span className="font-heading text-2xl tracking-tight text-primary">Mindor</span>
         </a>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
+        <nav
+          className="hidden items-center gap-8 md:flex"
+          aria-label="Main navigation"
+        >
           {navLinks.map((link) => (
             <a
-              key={link.href + link.label}
+              key={link.label}
               href={link.href}
-              className="font-body text-sm text-foreground/70 transition-colors hover:text-primary"
+              className="font-body text-sm text-muted transition-colors duration-150 hover:text-foreground"
             >
               {link.label}
             </a>
@@ -48,45 +65,56 @@ export default function Header({ locale = 'ka' }: HeaderProps) {
           </Button>
         </div>
 
-        {/* Mobile menu toggle */}
+        {/* Mobile toggle */}
         <button
-          className="flex flex-col gap-1.5 p-2 md:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
         >
           <span
-            className={`block h-0.5 w-6 bg-foreground transition-transform duration-200 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`}
+            className={`block h-px w-5 bg-foreground transition-all duration-300 origin-center ${
+              menuOpen ? 'translate-y-[6px] rotate-45' : ''
+            }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-foreground transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`}
+            className={`block h-px w-5 bg-foreground transition-all duration-300 ${
+              menuOpen ? 'opacity-0' : ''
+            }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-foreground transition-transform duration-200 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`}
+            className={`block h-px w-5 bg-foreground transition-all duration-300 origin-center ${
+              menuOpen ? '-translate-y-[6px] -rotate-45' : ''
+            }`}
           />
         </button>
       </Container>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="border-t border-border bg-background md:hidden">
-          <Container className="flex flex-col gap-4 py-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href + link.label}
-                href={link.href}
-                className="font-body text-base text-foreground/70 hover:text-primary"
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <Button variant="primary" size="sm" className="self-start">
+      {/* Mobile drawer */}
+      <div
+        className={[
+          'overflow-hidden border-b border-border/60 bg-background transition-all duration-300 md:hidden',
+          menuOpen ? 'max-h-72 opacity-100' : 'max-h-0 opacity-0',
+        ].join(' ')}
+      >
+        <Container className="flex flex-col gap-6 pb-8 pt-4">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="font-body text-base text-foreground"
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className="pt-2">
+            <Button variant="primary" size="sm">
               {ctaLabel}
             </Button>
-          </Container>
-        </div>
-      )}
+          </div>
+        </Container>
+      </div>
     </header>
   )
 }

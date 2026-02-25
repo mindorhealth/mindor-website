@@ -1,4 +1,5 @@
 import Container from '../ui/Container'
+import Button from '../ui/Button'
 
 interface StepsSectionProps {
   locale?: 'ka' | 'en'
@@ -7,46 +8,46 @@ interface StepsSectionProps {
 const steps = {
   ka: [
     {
-      icon: '📋',
+      n: '01',
       title: 'გაიარე ტესტი',
-      description: 'უპასუხე 5 მარტივ კითხვას შენი ჯანმრთელობის შეფასებისთვის.',
+      description: 'ექიმის მიერ შემუშავებული 5 კითხვა შენი ჯანმრთელობის შეფასებისთვის.',
     },
     {
-      icon: '🔬',
-      title: 'მიიღე პირადი შედეგი',
-      description: 'ჩვენი ალგორითმი გაანალიზებს შენს პასუხებს და შეარჩევს საუკეთესო გამოსავალს.',
+      n: '02',
+      title: 'მიიღე შედეგი',
+      description: 'პერსონალური ანალიზი, კონკრეტული რეკომენდაციებით.',
     },
     {
-      icon: '📦',
-      title: 'შეუკვეთე პროდუქტი',
-      description: 'შეარჩიე შენთვის შესაფერი პლანი და მიიღე სახლამდე მიტანით.',
+      n: '03',
+      title: 'შეუკვეთე',
+      description: 'შეარჩიე შენთვის შესაფერი პლანი. მიტანა — 1–2 სამუშაო დღეში.',
     },
     {
-      icon: '✨',
+      n: '04',
       title: 'იგრძენი სხვაობა',
-      description: 'პირველი შედეგები ჩანს 2–4 კვირაში. გრძელვადიანი კეთილდღეობა 3 თვეში.',
+      description: 'პირველი შედეგები 2–4 კვირაში. სრული ეფექტი 3 თვეში.',
     },
   ],
   en: [
     {
-      icon: '📋',
-      title: 'Take the quiz',
-      description: 'Answer 5 simple questions to assess your health needs.',
+      n: '01',
+      title: 'Take the assessment',
+      description: '5 doctor-developed questions to evaluate your health.',
     },
     {
-      icon: '🔬',
-      title: 'Get your personal result',
-      description: 'Our algorithm analyses your answers and selects the best solution.',
+      n: '02',
+      title: 'Receive your result',
+      description: 'A personal analysis with specific recommendations.',
     },
     {
-      icon: '📦',
-      title: 'Order your product',
-      description: 'Choose the plan that suits you and receive it with home delivery.',
+      n: '03',
+      title: 'Place your order',
+      description: 'Choose the plan that fits you. Delivery in 1–2 working days.',
     },
     {
-      icon: '✨',
+      n: '04',
       title: 'Feel the difference',
-      description: 'First results visible in 2–4 weeks. Long-term wellbeing in 3 months.',
+      description: 'First results in 2–4 weeks. Full effect in 3 months.',
     },
   ],
 }
@@ -56,47 +57,54 @@ export default function StepsSection({ locale = 'ka' }: StepsSectionProps) {
     ka: 'როგორ მუშაობს',
     en: 'How it works',
   }
-  const subtext = {
-    ka: 'ოთხი მარტივი ნაბიჯი უკეთეს ჯანმრთელობამდე.',
-    en: 'Four simple steps to better health.',
+  const cta = {
+    ka: 'დაიწყე ახლა',
+    en: 'Start now',
   }
 
   const currentSteps = steps[locale]
 
   return (
-    <section className="bg-secondary py-20 lg:py-28">
-      <Container>
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-heading text-4xl text-primary sm:text-5xl">{heading[locale]}</h2>
-          <p className="mt-4 font-body text-lg text-muted">{subtext[locale]}</p>
+    <section className="bg-background py-24 lg:py-32">
+      <div className="border-t border-border" />
+
+      <Container className="pt-24 lg:pt-32">
+
+        {/* Heading */}
+        <div className="reveal max-w-md">
+          <h2 className="font-heading text-4xl text-foreground lg:text-5xl">{heading[locale]}</h2>
         </div>
 
-        {/* Steps */}
-        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {currentSteps.map((step, index) => (
-            <div key={step.title} className="relative flex flex-col items-start">
-              {/* Connector line (desktop only, not on last item) */}
-              {index < currentSteps.length - 1 && (
-                <div
-                  className="absolute left-[calc(50%+2rem)] top-8 hidden h-px w-full bg-border lg:block"
-                  aria-hidden="true"
-                />
-              )}
+        {/* Steps — numbered rows */}
+        <div className="reveal delay-100 mt-16 divide-y divide-border">
+          {currentSteps.map((step) => (
+            <div
+              key={step.n}
+              className="grid grid-cols-[3rem_1fr] gap-8 py-8 lg:grid-cols-[4rem_1fr_1fr] lg:items-center lg:gap-12"
+            >
+              {/* Number */}
+              <span className="font-body text-sm font-medium tabular-nums text-muted">
+                {step.n}
+              </span>
 
-              {/* Step number badge */}
-              <div className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-md">
-                <span className="text-2xl">{step.icon}</span>
-                <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-accent font-body text-xs font-bold text-white">
-                  {index + 1}
-                </span>
-              </div>
+              {/* Title */}
+              <p className="font-heading text-xl text-foreground lg:text-2xl">{step.title}</p>
 
-              <h3 className="font-heading text-xl text-primary">{step.title}</h3>
-              <p className="mt-2 font-body text-sm leading-relaxed text-muted">{step.description}</p>
+              {/* Description — hidden on mobile, shown on desktop in third column */}
+              <p className="col-start-2 mt-1 font-body text-sm leading-relaxed text-muted lg:col-start-3 lg:mt-0">
+                {step.description}
+              </p>
             </div>
           ))}
         </div>
+
+        {/* CTA below steps */}
+        <div className="reveal delay-200 mt-14">
+          <Button variant="primary" size="md">
+            {cta[locale]}
+          </Button>
+        </div>
+
       </Container>
     </section>
   )
